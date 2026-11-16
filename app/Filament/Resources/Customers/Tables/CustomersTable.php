@@ -22,6 +22,7 @@ class CustomersTable
                 TextColumn::make('membership')->label('Anggota')->badge(),
                 TextColumn::make('source')->label('Sumber')->badge()->toggleable(),
                 TextColumn::make('first_visit_at')->label('Kunjungan pertama')->date('d/m/Y')->sortable(),
+                TextColumn::make('visits_count')->counts('visits')->label('Kunjungan')->sortable(),
             ])
             ->filters([
                 SelectFilter::make('first_clinic_id')

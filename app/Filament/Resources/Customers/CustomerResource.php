@@ -7,6 +7,7 @@ use App\Filament\Resources\Customers\Pages\EditCustomer;
 use App\Filament\Resources\Customers\Pages\ListCustomers;
 use App\Filament\Resources\Customers\Schemas\CustomerForm;
 use App\Filament\Resources\Customers\Tables\CustomersTable;
+use App\Filament\Resources\Customers\RelationManagers\VisitsRelationManager;
 use App\Models\Customer;
 use BackedEnum;
 use Filament\Resources\Resource;
@@ -22,7 +23,7 @@ class CustomerResource extends Resource
 
     protected static ?string $modelLabel = 'Customer';
 
-    protected static ?string $pluralModelLabel = 'Customer';
+    protected static ?string $pluralModelLabel = 'Customers';
 
     protected static ?string $recordTitleAttribute = 'name';
 
@@ -42,6 +43,15 @@ class CustomerResource extends Resource
             'index'  => ListCustomers::route('/'),
             'create' => CreateCustomer::route('/create'),
             'edit'   => EditCustomer::route('/{record}/edit'),
+        ];
+    }
+
+    protected static ?int $navigationSort = 1;
+
+    public static function getRelations(): array
+    {
+        return [
+            VisitsRelationManager::class,
         ];
     }
 }
