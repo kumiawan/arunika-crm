@@ -59,13 +59,10 @@ class VisitsTable
                     ->options(ClosingType::class),
                 SelectFilter::make('customer.patient_type')
                     ->label('Pasien')
-                    ->options([PatientType::class])
-
+                    ->options(PatientType::class)
                     ->query(fn($query, array $data) => filled($data['value'])
                         ? $query->whereHas('customer', fn($q) => $q->where('patient_type', $data['value']))
                         : $query),
-
-
                 SelectFilter::make('bulan')
                     ->label('Bulan')
                     ->options(fn() => collect(range(0, 23))->mapWithKeys(function ($i) {

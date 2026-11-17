@@ -33,7 +33,7 @@ class CustomerForm
                         ->unique(ignoreRecord: true)
                         ->live(onBlur: true)
                         ->afterStateUpdated(fn($state, Set $set) => $set('wa', Customer::normalizeWa($state)))
-                        ->helperText('Format bebas, otomatis menjadi 62…'),
+                        ->helperText('auto format ke 62'),
                     DatePicker::make('birth_date')
                         ->label('Tanggal lahir'),
                     Select::make('source')
