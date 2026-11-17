@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Enums\CustomerSource;
 use App\Enums\Membership;
+use App\Enums\PatientType;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -12,7 +13,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 class Customer extends Model
 {
     protected $fillable = [
-        'name', 'wa', 'birth_date', 'source', 'membership',
+        'name', 'wa','patient_type', 'birth_date', 'source', 'membership',
         'first_clinic_id', 'first_visit_at', 'notes',
     ];
 
@@ -23,6 +24,7 @@ class Customer extends Model
             'first_visit_at' => 'date',
             'source'         => CustomerSource::class,
             'membership'     => Membership::class,
+            'patient_type'   => PatientType::class,
         ];
     }
 

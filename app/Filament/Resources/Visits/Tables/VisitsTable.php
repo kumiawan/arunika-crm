@@ -4,7 +4,7 @@ namespace App\Filament\Resources\Visits\Tables;
 
 use App\Enums\ClosingType;
 use App\Enums\Membership;
-use App\Models\Visit;
+use App\Enums\PatientType;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
@@ -20,19 +20,30 @@ class VisitsTable
         return $table
             ->modifyQueryUsing(fn(Builder $query) => $query->with(['customer', 'clinic']))
             ->columns([
-                TextColumn::make('visit_date')->label('Tanggal')->date('d/m/Y')->sortable(),
-                TextColumn::make('customer.name')->label('Customer')->searchable(),
-                TextColumn::make('clinic.name')->label('Klinik')->badge(),
-                TextColumn::make('status')
-                    ->label('Status')
-                    ->state(fn(Visit $record) => $record->customer?->first_visit_at?->isSameDay($record->visit_date) ? 'Baru' : 'Lama')
-                    ->badge()
-                    ->color(fn(string $state) => $state === 'Baru' ? 'success' : 'gray'),
-                TextColumn::make('membership')->label('Anggota')->badge(),
-                TextColumn::make('closing_type')->label('Tipe')->badge()->toggleable(),
+                TextColumn::make('visit_date')
+                    ->label('Tanggal')
+                    ->date('d/m/Y')
+                    ->sortable(),
+                TextColumn::make('customer.name')
+                    ->label('Customer')
+                    ->searchable(),
+                TextColumn::make('clinic.name')
+                    ->label('Klinik')
+                    ->badge(),
+                TextColumn::make('customer.patient_type')
+                    ->label('Pasien')
+                    ->badge(),
+                TextColumn::make('membership')
+                    ->label('Anggota')
+                    ->badge(),
+                TextColumn::make('closing_type')
+                    ->label('Tipe')
+                    ->badge()->toggleable(),
                 TextColumn::make('nominal')
                     ->label('Nominal')
-                    ->formatStateUsing(fn($state) => $state === null ? '-' : 'Rp ' . number_format($state, 0, ',', '.'))
+                    ->formatStateUsing(fn($state)
+                        => $state === null ? '-' : 'Rp '
+                            . number_format($state, 0, ',', '.'))
                     ->alignEnd()
                     ->sortable(),
             ])
@@ -46,6 +57,15 @@ class VisitsTable
                 SelectFilter::make('closing_type')
                     ->label('Tipe')
                     ->options(ClosingType::class),
+                SelectFilter::make('customer.patient_type')
+                    ->label('Pasien')
+                    ->options([PatientType::class])
+
+                    ->query(fn($query, array $data) => filled($data['value'])
+                        ? $query->whereHas('customer', fn($q) => $q->where('patient_type', $data['value']))
+                        : $query),
+
+
                 SelectFilter::make('bulan')
                     ->label('Bulan')
                     ->options(fn() => collect(range(0, 23))->mapWithKeys(function ($i) {

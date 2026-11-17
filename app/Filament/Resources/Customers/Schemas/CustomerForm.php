@@ -5,6 +5,7 @@ namespace App\Filament\Resources\Customers\Schemas;
 use App\Enums\CustomerSource;
 use App\Enums\Membership;
 use App\Models\Customer;
+use App\Enums\PatientType;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
@@ -50,6 +51,10 @@ class CustomerForm
                     Select::make('membership')
                         ->label('Anggota')
                         ->options(Membership::class),
+                    Select::make('patient_type')
+                        ->label('Tipe pasien')
+                        ->options(PatientType::class)
+                        ->default(PatientType::Baru),
                 ]),
             Textarea::make('notes')
                 ->label('Catatan')

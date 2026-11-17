@@ -3,6 +3,7 @@
 namespace App\Filament\Resources\Customers\Tables;
 
 use App\Enums\Membership;
+use App\Enums\PatientType;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
@@ -31,6 +32,9 @@ class CustomersTable
                 SelectFilter::make('membership')
                     ->label('Anggota')
                     ->options(Membership::class),
+                SelectFilter::make('patient_type')
+                    ->label('Tipe Pasien')
+                    ->options(PatientType::class),
             ])
             ->recordActions([
                 EditAction::make(),
