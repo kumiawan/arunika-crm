@@ -2,6 +2,8 @@
 
 namespace App\Filament\Resources\Customers\Tables;
 
+use App\Enums\Gender;
+use App\Enums\Clinic;
 use App\Enums\Membership;
 use App\Enums\PatientType;
 use Filament\Actions\BulkActionGroup;
@@ -17,24 +19,92 @@ class CustomersTable
     {
         return $table
             ->columns([
-                TextColumn::make('name')->label('Nama')->searchable()->sortable(),
-                TextColumn::make('wa')->label('WA')->searchable()->copyable(),
-                TextColumn::make('firstClinic.name')->label('Klinik pertama')->badge(),
-                TextColumn::make('membership')->label('Anggota')->badge(),
-                TextColumn::make('source')->label('Sumber')->badge()->toggleable(),
-                TextColumn::make('first_visit_at')->label('Kunjungan pertama')->date('d/m/Y')->sortable(),
-                TextColumn::make('visits_count')->counts('visits')->label('Kunjungan')->sortable(),
+                TextColumn::make('no')
+                    ->label('No.')
+                    ->rowIndex(),
+
+                TextColumn::make('external_id')
+                    ->label('No. ID')
+                    ->searchable()
+                    ->sortable()
+                    ->copyable(),
+
+                TextColumn::make('name')
+                    ->label('Nama Pasien')
+                    ->searchable()
+                    ->sortable(),
+
+                TextColumn::make('birth_date')
+                    ->label('Tgl. Lahir')
+                    ->date('d/m/Y')
+                    ->sortable(),
+
+                TextColumn::make('gender')
+                    ->label('JK')
+                    ->badge(),
+
+                TextColumn::make('wa')
+                    ->label('WhatsApp')
+                    ->searchable()
+                    ->copyable(),
+
+                TextColumn::make('age')
+                    ->label('Usia')
+                    ->suffix(' th')
+                    ->placeholder('-'),
+
+                TextColumn::make('address')
+                    ->label('Alamat')
+                    ->limit(40)
+                    ->tooltip(fn($state) => $state)
+                    ->searchable()
+                    ->toggleable(),
+
+                TextColumn::make('occupation')
+                    ->label('Pekerjaan')
+                    ->searchable()
+                    ->toggleable(),
+
+                TextColumn::make('membership')
+                    ->label('Membership')
+                    ->badge(),
+
+                TextColumn::make('patient_type')
+                    ->label('Tipe Pasien')
+                    ->badge()
+                    ->sortable(),
+
+                // Kolom lama, disembunyikan secara default
+                TextColumn::make('first_clinic')
+                    ->label('Klinik pertama')
+                    ->badge()
+                    ->toggleable(isToggledHiddenByDefault: true),
+
+                TextColumn::make('source')
+                    ->label('Sumber')
+                    ->badge()
+                    ->toggleable(isToggledHiddenByDefault: true),
+
+                TextColumn::make('first_visit_at')
+                    ->label('Kunjungan pertama')
+                    ->date('d/m/Y')
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true),
+
             ])
             ->filters([
-                SelectFilter::make('first_clinic_id')
+                SelectFilter::make('first_clinic')
                     ->label('Klinik')
-                    ->relationship('firstClinic', 'name'),
+                    ->options(Clinic::class),
                 SelectFilter::make('membership')
-                    ->label('Anggota')
+                    ->label('Keanggotaan')
                     ->options(Membership::class),
                 SelectFilter::make('patient_type')
                     ->label('Tipe Pasien')
                     ->options(PatientType::class),
+                SelectFilter::make('gender')
+                    ->label('JK')
+                    ->options(Gender::class),
             ])
             ->recordActions([
                 EditAction::make(),

@@ -2,19 +2,20 @@
 
 namespace App\Models;
 
-use App\Enums\CustomerSource;
+use App\Enums\Gender;
 use App\Enums\Membership;
 use App\Enums\PatientType;
-use Illuminate\Database\Eloquent\Casts\Attribute;
+use App\Enums\CustomerSource;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 
 class Customer extends Model
 {
     protected $fillable = [
         'name', 'wa','patient_type', 'birth_date', 'source', 'membership',
-        'first_clinic_id', 'first_visit_at', 'notes',
+        'first_clinic', 'first_visit_at', 'notes', 'external_id', 'gender',
+        'address', 'occupation',
     ];
 
     protected function casts(): array
@@ -22,15 +23,11 @@ class Customer extends Model
         return [
             'birth_date'     => 'date',
             'first_visit_at' => 'date',
-            'source'         => CustomerSource::class,
+            'gender'         => Gender::class,
             'membership'     => Membership::class,
+            'source'         => CustomerSource::class,
             'patient_type'   => PatientType::class,
         ];
-    }
-
-    public function firstClinic(): BelongsTo
-    {
-        return $this->belongsTo(Clinic::class, 'first_clinic_id');
     }
 
     public static function normalizeWa(?string $value): ?string
@@ -53,6 +50,11 @@ class Customer extends Model
     protected function wa(): Attribute
     {
         return Attribute::set(fn($value) => static::normalizeWa($value));
+    }
+
+    protected function age(): Attribute
+    {
+        return Attribute::get(fn() => $this->birth_date?->age);
     }
 
     public function visits(): HasMany

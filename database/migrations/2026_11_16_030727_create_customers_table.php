@@ -9,12 +9,17 @@ return new class extends Migration {
     {
         Schema::create('customers', function (Blueprint $table) {
             $table->id();
+            $table->string('external_id')->nullable()->unique();
             $table->string('name');
-            $table->string('wa', 20)->nullable()->unique();
             $table->date('birth_date')->nullable();
-            $table->string('source')->nullable();
+            $table->string('gender')->nullable();
+            $table->string('wa', 20)->nullable()->unique();
+            $table->text('address')->nullable();
+            $table->string('occupation')->nullable();
             $table->string('membership')->nullable();
-            $table->foreignId('first_clinic_id')->nullable()->constrained('clinics')->nullOnDelete();
+            $table->string('patient_type')->default('baru');
+            $table->string('source')->nullable();
+            $table->foreignId('first_clinic')->nullable();
             $table->date('first_visit_at')->nullable();
             $table->text('notes')->nullable();
             $table->timestamps();

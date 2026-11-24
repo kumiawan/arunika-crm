@@ -9,7 +9,8 @@ class ClinicSeeder extends Seeder
 {
     public function run(): void
     {
-        Clinic::firstOrCreate(['slug' => 'pusat'], ['name' => 'Klinik Pusat']);
-        Clinic::firstOrCreate(['slug' => 'studio'], ['name' => 'Klinik Studio']);
+        // off dulu lur, opo jare dimas wes awm menengo ae
+        // Clinic::firstOrCreate(['slug' => 'pusat'], ['name' => 'Klinik Pusat']);
+        // Clinic::firstOrCreate(['slug' => 'studio'], ['name' => 'Klinik Studio']);
     }
 }
