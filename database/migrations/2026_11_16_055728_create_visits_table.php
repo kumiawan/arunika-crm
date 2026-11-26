@@ -9,7 +9,7 @@ return new class extends Migration {
     {
         Schema::create('visits', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('clinic_id')->constrained();
+            $table->string('clinic');
             $table->foreignId('customer_id')->constrained();
             $table->date('visit_date');
             $table->string('membership')->nullable();
@@ -20,7 +20,7 @@ return new class extends Migration {
             $table->string('source_ref')->nullable();
             $table->timestamps();
 
-            $table->index(['clinic_id', 'visit_date']);
+            $table->index(['clinic', 'visit_date']);
             $table->index(['customer_id', 'visit_date']);
         });
     }

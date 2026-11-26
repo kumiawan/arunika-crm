@@ -28,7 +28,7 @@ class VisitsRelationManager extends RelationManager
             ->recordTitleAttribute('visit_date')
             ->columns([
                 TextColumn::make('visit_date')->label('Tanggal')->date('d/m/Y')->sortable(),
-                TextColumn::make('clinic.name')->label('Klinik')->badge(),
+                TextColumn::make('clinic')->label('Klinik')->badge(),
                 TextColumn::make('membership')->label('Anggota')->badge(),
                 TextColumn::make('closing_type')->label('Tipe')->badge(),
                 TextColumn::make('nominal')

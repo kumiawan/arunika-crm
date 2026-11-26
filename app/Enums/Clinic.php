@@ -6,8 +6,8 @@ use Filament\Support\Contracts\HasLabel;
 
 enum Clinic: string implements HasLabel
 {
-    case Studio = 'Studio';
-    case Pusat = 'Pusat';
+    case Studio = 'studio';
+    case Pusat = 'pusat';
 
     public function getLabel(): string
     {

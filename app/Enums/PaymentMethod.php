@@ -6,13 +6,15 @@ use Filament\Support\Contracts\HasLabel;
 
 enum PaymentMethod: string implements HasLabel
 {
-    case TunaiTransfer = 'tunai_transfer';
+    case Tunai = 'tunai';
+    case Transfer = 'transfer';
     case PotongSaldo = 'potong_saldo';
 
     public function getLabel(): string
     {
         return match ($this) {
-            self::TunaiTransfer => 'Tunai atau transfer',
+            self::Tunai => 'Tunai',
+            self::Transfer => 'Transfer',
             self::PotongSaldo => 'Potong saldo',
         };
     }

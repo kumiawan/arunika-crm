@@ -2,11 +2,12 @@
 
 namespace App\Filament\Resources\Visits\Schemas;
 
-use App\Enums\ClosingType;
-use App\Enums\Membership;
-use App\Enums\PaymentMethod;
-use App\Models\Customer;
 use Closure;
+use App\Enums\Clinic;
+use App\Models\Customer;
+use App\Enums\Membership;
+use App\Enums\ClosingType;
+use App\Enums\PaymentMethod;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
@@ -19,9 +20,9 @@ class VisitForm
     public static function configure(Schema $schema, bool $withCustomer = true): Schema
     {
         $kunjungan = [
-            Select::make('clinic_id')
+            Select::make('clinic')
                 ->label('Klinik')
-                ->relationship('clinic', 'name')
+                ->options(Clinic::class)
                 ->required(),
             DatePicker::make('visit_date')
                 ->label('Tanggal')
@@ -69,7 +70,7 @@ class VisitForm
                 ->columns(2)
                 ->schema([
                     Select::make('membership')
-                        ->label('Anggota')
+                        ->label('Membership')
                         ->options(Membership::class),
                     Select::make('closing_type')
                         ->label('Tipe transaksi')

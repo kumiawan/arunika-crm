@@ -2,8 +2,9 @@
 
 namespace App\Models;
 
-use App\Enums\ClosingType;
+use App\Enums\Clinic;
 use App\Enums\Membership;
+use App\Enums\ClosingType;
 use App\Enums\PaymentMethod;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -11,7 +12,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 class Visit extends Model
 {
     protected $fillable = [
-        'clinic_id', 'customer_id', 'visit_date', 'membership', 'closing_type',
+        'clinic', 'customer_id', 'visit_date', 'membership', 'closing_type',
         'closing_note', 'nominal', 'payment_method', 'source_ref',
     ];
 
@@ -20,15 +21,11 @@ class Visit extends Model
         return [
             'visit_date'     => 'date',
             'nominal'        => 'integer',
+            'clinic'        => Clinic::class,
             'membership'     => Membership::class,
             'closing_type'   => ClosingType::class,
             'payment_method' => PaymentMethod::class,
         ];
-    }
-
-    public function clinic(): BelongsTo
-    {
-        return $this->belongsTo(Clinic::class);
     }
 
     public function customer(): BelongsTo
@@ -45,7 +42,7 @@ class Visit extends Model
             if ($customer && (! $customer->first_visit_at || $visit->visit_date->lt($customer->first_visit_at))) {
                 $customer->update([
                     'first_visit_at'  => $visit->visit_date,
-                    'first_clinic_id' => $visit->clinic_id,
+                    'first_clinic' => $visit->clinic,
                 ]);
             }
         });

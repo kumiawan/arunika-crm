@@ -2,8 +2,9 @@
 
 namespace App\Filament\Resources\Visits\Tables;
 
-use App\Enums\ClosingType;
+use App\Enums\Clinic;
 use App\Enums\Membership;
+use App\Enums\ClosingType;
 use App\Enums\PatientType;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
@@ -18,7 +19,7 @@ class VisitsTable
     public static function configure(Table $table): Table
     {
         return $table
-            ->modifyQueryUsing(fn(Builder $query) => $query->with(['customer', 'clinic']))
+            ->modifyQueryUsing(fn(Builder $query) => $query->with(['customer']))
             ->columns([
                 TextColumn::make('visit_date')
                     ->label('Tanggal')
@@ -27,17 +28,17 @@ class VisitsTable
                 TextColumn::make('customer.name')
                     ->label('Customer')
                     ->searchable(),
-                TextColumn::make('clinic.name')
+                TextColumn::make('clinic')
                     ->label('Klinik')
                     ->badge(),
                 TextColumn::make('customer.patient_type')
                     ->label('Pasien')
                     ->badge(),
                 TextColumn::make('membership')
-                    ->label('Anggota')
+                    ->label('Membership')
                     ->badge(),
                 TextColumn::make('closing_type')
-                    ->label('Tipe')
+                    ->label('Tipe Transaksi')
                     ->badge()->toggleable(),
                 TextColumn::make('nominal')
                     ->label('Nominal')
@@ -48,9 +49,9 @@ class VisitsTable
                     ->sortable(),
             ])
             ->filters([
-                SelectFilter::make('clinic_id')
+                SelectFilter::make('clinic')
                     ->label('Klinik')
-                    ->relationship('clinic', 'name'),
+                    ->options(Clinic::class),
                 SelectFilter::make('membership')
                     ->label('Anggota')
                     ->options(Membership::class),
